@@ -322,6 +322,94 @@
 				  }
 		});
 
+		//LIST pagI 
+		document.addEventListener('DOMContentLoaded', function () {
+			const tours = document.querySelectorAll('.tours-list .column');
+			const itemsPerPage = 6;
+			const totalTours = tours.length;
+			const totalPages = Math.ceil(totalTours / itemsPerPage);
+			let currentPage = 1;
+		  
+			const btns = document.querySelectorAll('.btn');
+			const paginationWrapper = document.querySelector('.pagination-wrapper');
+			const bigDotContainer = document.querySelector('.big-dot-container');
+			const littleDot = document.querySelector('.little-dot');
+		  
+			for (let i = 0; i < btns.length; i++) {
+			  btns[i].addEventListener('click', btnClick);
+			}
+		  
+			function btnClick() {
+			  if (this.classList.contains('btn--prev')) {
+				paginationWrapper.classList.add('transition-prev');
+			  } else {
+				paginationWrapper.classList.add('transition-next');
+			  }
+		  
+			  const timeout = setTimeout(cleanClasses, 500);
+			}
+		  
+			function cleanClasses() {
+			  if (paginationWrapper.classList.contains('transition-next')) {
+				paginationWrapper.classList.remove('transition-next');
+			  } else if (paginationWrapper.classList.contains('transition-prev')) {
+				paginationWrapper.classList.remove('transition-prev');
+			  }
+			}
+		  
+			function showPage(page) {
+			  const startIndex = (page - 1) * itemsPerPage;
+			  const endIndex = startIndex + itemsPerPage;
+		  
+			  tours.forEach(function (tour, index) {
+				if (index >= startIndex && index < endIndex) {
+				  tour.style.display = 'block';
+				} else {
+				  tour.style.display = 'none';
+				}
+			  });
+			}
+		  
+			function updatePagination() {
+			  const paginationDots = document.querySelectorAll('.pagination-container .little-dot');
+			  paginationDots.forEach(function (dot, index) {
+				if (index === currentPage - 1) {
+				  dot.classList.add('active');
+				} else {
+				  dot.classList.remove('active');
+				}
+			  });
+			}
+		  
+			function navigateToPage(page) {
+			  currentPage = page;
+			  showPage(currentPage);
+			  updatePagination();
+			}
+		  
+			showPage(currentPage);
+			updatePagination();
+		  
+			document.querySelector('.btn--prev').addEventListener('click', function () {
+			  if (currentPage > 1) {
+				navigateToPage(currentPage - 1);
+			  }
+			});
+		  
+			document.querySelector('.btn--next').addEventListener('click', function () {
+			  if (currentPage < totalPages) {
+				navigateToPage(currentPage + 1);
+			  }
+			});
+		  
+			const paginationDots = document.querySelectorAll('.pagination-container .little-dot');
+			paginationDots.forEach(function (dot, index) {
+			  dot.addEventListener('click', function () {
+				navigateToPage(index + 1);
+			  });
+			});
+		  });
+		  
 
 
 
